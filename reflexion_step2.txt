@@ -112,6 +112,119 @@ Dump of assembler code for function step1:
     cmp al, 0x3c	0x3c	<
     cmp al, 0x33	0x33	3
 
+flag 1 : "PoC<3"
+
     mais aussi, il existe une step 2
 
-step 2
+step 2:
+
+gdb-peda$ disas step2
+Dump of assembler code for function step2:
+   0x08049345 <+0>:     push   ebp
+   0x08049346 <+1>:     mov    ebp,esp
+   0x08049348 <+3>:     sub    esp,0x38
+   0x0804934b <+6>:     sub    esp,0xc
+   0x0804934e <+9>:     push   0x804a094
+   0x08049353 <+14>:    call   0x8049080 <puts@plt>
+   0x08049358 <+19>:    add    esp,0x10
+   0x0804935b <+22>:    mov    DWORD PTR [ebp-0x1b],0x724e217d
+   0x08049362 <+29>:    mov    DWORD PTR [ebp-0x17],0x225c3a5f
+   0x08049369 <+36>:    mov    WORD PTR [ebp-0x13],0x274e
+   0x0804936f <+42>:    mov    BYTE PTR [ebp-0x11],0x0
+   0x08049373 <+46>:    sub    esp,0xc
+   0x08049376 <+49>:    push   0x804a0cf
+   0x0804937b <+54>:    call   0x8049080 <puts@plt>
+   0x08049380 <+59>:    add    esp,0x10
+   0x08049383 <+62>:    sub    esp,0x4
+   0x08049386 <+65>:    push   0xa
+   0x08049388 <+67>:    lea    eax,[ebp-0x26]
+   0x0804938b <+70>:    push   eax
+   0x0804938c <+71>:    push   0x0
+   0x0804938e <+73>:    call   0x8049050 <read@plt>
+   0x08049393 <+78>:    add    esp,0x10
+   0x08049396 <+81>:    mov    DWORD PTR [ebp-0x10],eax
+   0x08049399 <+84>:    cmp    DWORD PTR [ebp-0x10],0xa
+   0x0804939d <+88>:    jne    0x8049407 <step2+194>
+   0x0804939f <+90>:    mov    DWORD PTR [ebp-0xc],0x0
+   0x080493a6 <+97>:    jmp    0x80493ce <step2+137>
+   0x080493a8 <+99>:    lea    edx,[ebp-0x1b]
+   0x080493ab <+102>:   mov    eax,DWORD PTR [ebp-0xc]
+   0x080493ae <+105>:   add    eax,edx
+   0x080493b0 <+107>:   movzx  ecx,BYTE PTR [eax]
+   0x080493b3 <+110>:   lea    edx,[ebp-0x26]
+   0x080493b6 <+113>:   mov    eax,DWORD PTR [ebp-0xc]
+   0x080493b9 <+116>:   add    eax,edx
+   0x080493bb <+118>:   movzx  eax,BYTE PTR [eax]
+   0x080493be <+121>:   xor    ecx,eax
+   0x080493c0 <+123>:   lea    edx,[ebp-0x31]
+   0x080493c3 <+126>:   mov    eax,DWORD PTR [ebp-0xc]
+   0x080493c6 <+129>:   add    eax,edx
+   0x080493c8 <+131>:   mov    BYTE PTR [eax],cl
+   0x080493ca <+133>:   add    DWORD PTR [ebp-0xc],0x1
+   0x080493ce <+137>:   cmp    DWORD PTR [ebp-0xc],0xa
+   0x080493d2 <+141>:   jle    0x80493a8 <step2+99>
+   0x080493d4 <+143>:   sub    esp,0x8
+   0x080493d7 <+146>:   push   0x804a0e3
+   0x080493dc <+151>:   lea    eax,[ebp-0x31]
+   0x080493df <+154>:   push   eax
+   0x080493e0 <+155>:   call   0x8049040 <strcmp@plt>
+   0x080493e5 <+160>:   add    esp,0x10
+   0x080493e8 <+163>:   test   eax,eax
+   0x080493ea <+165>:   jne    0x804940a <step2+197>
+   0x080493ec <+167>:   sub    esp,0x8
+   0x080493ef <+170>:   lea    eax,[ebp-0x31]
+   0x080493f2 <+173>:   push   eax
+   0x080493f3 <+174>:   push   0x804a0f0
+   0x080493f8 <+179>:   call   0x8049060 <printf@plt>
+   0x080493fd <+184>:   add    esp,0x10
+   0x08049400 <+187>:   call   0x8049265 <step3>
+   0x08049405 <+192>:   jmp    0x804940b <step2+198>
+   0x08049407 <+194>:   nop
+   0x08049408 <+195>:   jmp    0x804940b <step2+198>
+   0x0804940a <+197>:   nop
+   0x0804940b <+198>:   leave  
+   0x0804940c <+199>:   ret    
+
+read interessant ? 
+
+   0x0804938e <+73>:    call   0x8049050 <read@plt>
+   0x08049393 <+78>:    add    esp,0x10
+   espere 10 caractere.
+
+strcmp interessant :    
+    0x080493e0 <+155>:   call   0x8049040 <strcmp@plt>:
+
+    gdb-peda$ x/s 0x804a0e3
+    0x804a0e3:      "4e!!oWor!d"
+
+    |
+
+    0x080493ab <+102>:   mov    eax,DWORD PTR [ebp-0xc]
+   0x080493ae <+105>:   add    eax,edx
+   0x080493b0 <+107>:   movzx  ecx,BYTE PTR [eax]
+   0x080493b3 <+110>:   lea    edx,[ebp-0x26]
+   0x080493b6 <+113>:   mov    eax,DWORD PTR [ebp-0xc]
+   0x080493b9 <+116>:   add    eax,edx
+   0x080493bb <+118>:   movzx  eax,BYTE PTR [eax]
+   0x080493be <+121>:   xor    ecx,eax
+   0x080493c0 <+123>:   lea    edx,[ebp-0x31]
+   0x080493c3 <+126>:   mov    eax,DWORD PTR [ebp-0xc]
+   0x080493c6 <+129>:   add    eax,edx
+
+   => repetition de ebp-0xc ?? 
+-> clé ? 
+0x080493be <+121>:   xor    ecx,eax
+Flag XOR Clé = ChaîneAttendue donc flag = CA XOR clé
+-> breakpoint ? 
+
+breakpoint au strcmp: 0x080493e0
+====================== CHAMP1 ======================
+
+Argh you found my flag, I will defeat you next time ! "PoC<3"
+
+====================== CHAMP2 ======================
+
+What is the flag ?
+ecrire 10 caractere: testtestte
+
+*ne sait pas quoi faire de ces infos* test.
