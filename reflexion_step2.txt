@@ -1,0 +1,117 @@
+gdb-peda$ disas main
+Dump of assembler code for function main:
+    0x080494a0 <+0>:     lea    ecx,[esp+0x4]
+    0x080494a4 <+4>:     and    esp,0xfffffff0
+    0x080494a7 <+7>:     push   DWORD PTR [ecx-0x4]
+    0x080494aa <+10>:    push   ebp
+    0x080494ab <+11>:    mov    ebp,esp
+    0x080494ad <+13>:    push   ebx
+    0x080494ae <+14>:    push   ecx
+    0x080494af <+15>:    mov    ebx,ecx
+    0x080494b1 <+17>:    sub    esp,0xc
+    0x080494b4 <+20>:    push   0x804a1cc
+    0x080494b9 <+25>:    call   0x8049080 <puts@plt>
+    0x080494be <+30>:    add    esp,0x10
+    0x080494c1 <+33>:    cmp    DWORD PTR [ebx],0x2
+    0x080494c4 <+36>:    je     0x80494cd <main+45>
+    0x080494c6 <+38>:    mov    eax,0x1
+    0x080494cb <+43>:    jmp    0x80494f6 <main+86>
+    0x080494cd <+45>:    mov    eax,DWORD PTR [ebx+0x4]
+    0x080494d0 <+48>:    add    eax,0x4
+    0x080494d3 <+51>:    mov    eax,DWORD PTR [eax]
+    0x080494d5 <+53>:    sub    esp,0xc
+    0x080494d8 <+56>:    push   eax
+    0x080494d9 <+57>:    call   0x804940d <step1>
+    0x080494de <+62>:    add    esp,0x10
+    0x080494e1 <+65>:    sub    esp,0xc
+    0x080494e4 <+68>:    push   0x804a41d
+    0x080494e9 <+73>:    call   0x8049080 <puts@plt>
+    0x080494ee <+78>:    add    esp,0x10
+    0x080494f1 <+81>:    mov    eax,0x0
+    0x080494f6 <+86>:    lea    esp,[ebp-0x8]
+    0x080494f9 <+89>:    pop    ecx
+    0x080494fa <+90>:    pop    ebx
+    0x080494fb <+91>:    pop    ebp
+    0x080494fc <+92>:    lea    esp,[ecx-0x4]
+    0x080494ff <+95>:    ret 
+
+    ligne importantes:
+    0x080494c1 <+33>:    cmp    DWORD PTR [ebx],0x2
+    0x080494c4 <+36>:    je     0x80494cd <main+45>
+    0x080494c6 <+38>:    mov    eax,0x1
+    0x080494cb <+43>:    jmp    0x80494f6 <main+86>
+    ebx = nbr arg donc si =/= jump fin.
+
+    si 2 arg nov to step1
+
+step 1 : 
+gdb-peda$ disas step1
+Dump of assembler code for function step1:
+   0x0804940d <+0>:     push   ebp
+   0x0804940e <+1>:     mov    ebp,esp
+   0x08049410 <+3>:     sub    esp,0x8
+   0x08049413 <+6>:     sub    esp,0xc
+   0x08049416 <+9>:     push   0x804a150
+   0x0804941b <+14>:    call   0x8049080 <puts@plt>
+   0x08049420 <+19>:    add    esp,0x10
+   0x08049423 <+22>:    sub    esp,0xc
+   0x08049426 <+25>:    push   DWORD PTR [ebp+0x8]
+   0x08049429 <+28>:    call   0x80490a0 <strlen@plt>
+   0x0804942e <+33>:    add    esp,0x10
+   0x08049431 <+36>:    cmp    eax,0x5
+   0x08049434 <+39>:    jne    0x804948e <step1+129>
+   0x08049436 <+41>:    mov    eax,DWORD PTR [ebp+0x8]
+   0x08049439 <+44>:    movzx  eax,BYTE PTR [eax]
+   0x0804943c <+47>:    cmp    al,0x50
+   0x0804943e <+49>:    jne    0x8049491 <step1+132>
+   0x08049440 <+51>:    mov    eax,DWORD PTR [ebp+0x8]
+   0x08049443 <+54>:    add    eax,0x1
+   0x08049446 <+57>:    movzx  eax,BYTE PTR [eax]
+   0x08049449 <+60>:    cmp    al,0x6f
+   0x0804944b <+62>:    jne    0x8049494 <step1+135>
+   0x0804944d <+64>:    mov    eax,DWORD PTR [ebp+0x8]
+   0x08049450 <+67>:    add    eax,0x2
+   0x08049453 <+70>:    movzx  eax,BYTE PTR [eax]
+   0x08049456 <+73>:    cmp    al,0x43
+   0x08049458 <+75>:    jne    0x8049497 <step1+138>
+   0x0804945a <+77>:    mov    eax,DWORD PTR [ebp+0x8]
+   0x0804945d <+80>:    add    eax,0x3
+   0x08049460 <+83>:    movzx  eax,BYTE PTR [eax]
+   0x08049463 <+86>:    cmp    al,0x3c
+   0x08049465 <+88>:    jne    0x804949a <step1+141>
+   0x08049467 <+90>:    mov    eax,DWORD PTR [ebp+0x8]
+   0x0804946a <+93>:    add    eax,0x4
+   0x0804946d <+96>:    movzx  eax,BYTE PTR [eax]
+   0x08049470 <+99>:    cmp    al,0x33
+   0x08049472 <+101>:   jne    0x804949d <step1+144>
+   0x08049474 <+103>:   sub    esp,0x8
+   0x08049477 <+106>:   push   DWORD PTR [ebp+0x8]
+   0x0804947a <+109>:   push   0x804a18c
+   0x0804947f <+114>:   call   0x8049060 <printf@plt>
+   0x08049484 <+119>:   add    esp,0x10
+   0x08049487 <+122>:   call   0x8049345 <step2>
+   0x0804948c <+127>:   jmp    0x804949e <step1+145>
+   0x0804948e <+129>:   nop
+   0x0804948f <+130>:   jmp    0x804949e <step1+145>
+   0x08049491 <+132>:   nop
+   0x08049492 <+133>:   jmp    0x804949e <step1+145>
+   0x08049494 <+135>:   nop
+   0x08049495 <+136>:   jmp    0x804949e <step1+145>
+   0x08049497 <+138>:   nop
+   0x08049498 <+139>:   jmp    0x804949e <step1+145>
+   0x0804949a <+141>:   nop
+   0x0804949b <+142>:   jmp    0x804949e <step1+145>
+   0x0804949d <+144>:   nop
+   0x0804949e <+145>:   leave  
+   0x0804949f <+146>:   ret    
+
+   interessant: arg: 5caractere ecrit en brut: 
+    cmp al, 0x50	0x50	P
+    cmp al, 0x6f	0x6f	o
+    cmp al, 0x43	0x43	C
+    cmp al, 0x3c	0x3c	<
+    cmp al, 0x33	0x33	3
+
+    mais aussi, il existe une step 2
+
+step 2
